@@ -4,6 +4,14 @@ export class MainPage extends BasePage {
   private readonly headerLocator: Locator;
   private readonly categoriesTabsLocator: Locator;
   private readonly menuLocator: Locator;
+  private readonly headerAddButtonLocator: Locator;
+  private readonly headerNotificationsButtonLocator: Locator;
+  private readonly headerLoginButtonLocator: Locator;
+  private readonly headerAddButtonPopupListLocator: Locator;
+  private readonly headerNotificationsPopupLocator: Locator;
+  private readonly authorizationModalLocator: Locator;
+  private readonly switchToEmailAuthorizationButtonLocator: Locator;
+  private readonly switchToNumberRegistrationButtonLocator: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -16,6 +24,24 @@ export class MainPage extends BasePage {
       })
       .nth(1);
     this.menuLocator = this.page.getByLabel('Облегченная панель навигации');
+    this.headerAddButtonLocator = this.page.getByRole('button', { name: 'Добавить' });
+    this.headerNotificationsButtonLocator = this.page.getByRole('button', { name: 'Уведомления' });
+    this.headerLoginButtonLocator = this.page.getByRole('button', { name: 'Вход и регистрация' });
+    this.headerAddButtonPopupListLocator = this.page.locator(
+      '.wdp-header-right-module__uploader ul',
+    );
+    this.headerNotificationsPopupLocator = this.page.locator(
+      '.wdp-notifications-popup-module__wrapper',
+    );
+    this.authorizationModalLocator = this.page.locator('iframe[title="Multipass"]');
+    this.switchToEmailAuthorizationButtonLocator = this.page
+      .locator('iframe[title="Multipass"]')
+      .contentFrame()
+      .getByRole('button', { name: 'войти с помощью Почта' });
+    this.switchToNumberRegistrationButtonLocator = this.page
+      .locator('iframe[title="Multipass"]')
+      .contentFrame()
+      .getByRole('button', { name: 'Зарегистрироваться по телефону' });
   }
 
   async open() {
@@ -23,14 +49,57 @@ export class MainPage extends BasePage {
   }
 
   async headerHasCorrectAriaSnapshot() {
-    await expect(this.headerLocator).toMatchAriaSnapshot();
+    await expect(this.headerLocator).toMatchAriaSnapshot({ name: 'headerAriaSnapshot.yml' });
   }
 
   async categoriesTabsHasCorrectAriaSnapshot() {
-    await expect(this.categoriesTabsLocator).toMatchAriaSnapshot();
+    await expect(this.categoriesTabsLocator).toMatchAriaSnapshot({
+      name: 'categoriesTabsAriaSnapshot.yml',
+    });
   }
 
   async menuHasCorrectAriaSnapshot() {
-    await expect(this.menuLocator).toMatchAriaSnapshot();
+    await expect(this.menuLocator).toMatchAriaSnapshot({ name: 'menuAriaSnapshot.yml' });
+  }
+
+  async openAddPopupList() {
+    await this.headerAddButtonLocator.click();
+  }
+
+  async openNotificationsPopup() {
+    await this.headerNotificationsButtonLocator.click();
+  }
+
+  async openAuthorizationModal() {
+    await this.headerLoginButtonLocator.click();
+  }
+
+  async switchToRegistrationModal() {
+    await this.switchToEmailAuthorizationButtonLocator.click();
+    await this.switchToNumberRegistrationButtonLocator.click();
+  }
+
+  async addPopupListHasCorrectAriaSnapshot() {
+    await expect(this.headerAddButtonPopupListLocator).toMatchAriaSnapshot({
+      name: 'addButtonPopupList.yml',
+    });
+  }
+
+  async notificationsPopupHasCorrectAriaSnapshot() {
+    await expect(this.headerNotificationsPopupLocator).toMatchAriaSnapshot({
+      name: 'notificationsPopup.yml',
+    });
+  }
+
+  async authorizationModalHasCorrectAriaSnapshot() {
+    await expect(this.authorizationModalLocator).toMatchAriaSnapshot({
+      name: 'authorizationModal.yml',
+    });
+  }
+
+  async registrationModalHasCorrectAriaSnapshot() {
+    await expect(this.authorizationModalLocator).toMatchAriaSnapshot({
+      name: 'registrationModal.yml',
+    });
   }
 }
