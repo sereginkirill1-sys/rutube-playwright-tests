@@ -1,6 +1,9 @@
 import { test, expect } from '../../fixtures/fixtures';
 import { MainPage } from '../../pages/MainPage';
 
+test.beforeEach(async ({ mainPage }) => {
+  await mainPage.closeModalWindow();
+});
 test('Проверка доступности элементов хэдера', async ({ mainPage }) => {
   await mainPage.headerHasCorrectAriaSnapshot();
 });

@@ -56,6 +56,10 @@ export class MainPage extends BasePage {
     await this.page.goto('https://rutube.ru/');
   }
 
+  async closeModalWindow() {
+    await this.page.getByRole('button', { name: 'Закрыть' }).click();
+  }
+
   async headerHasCorrectAriaSnapshot() {
     await expect(this.headerLocator).toMatchAriaSnapshot({ name: 'headerAriaSnapshot.yml' });
   }
