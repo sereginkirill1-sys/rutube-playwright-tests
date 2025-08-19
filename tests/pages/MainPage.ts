@@ -15,6 +15,9 @@ export class MainPage extends BasePage {
   private readonly menuButtonLocator: Locator;
   private readonly openMenuAriaLocator: Locator;
   private readonly changeThemeButtonLocator: Locator;
+  private readonly userLogoLocator: Locator;
+  private readonly headerUserMenuLocator: Locator;
+  private readonly spamModalWindow: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -50,85 +53,80 @@ export class MainPage extends BasePage {
     this.changeThemeButtonLocator = this.page.getByRole('button', {
       name: 'Переключить на светлую тему',
     });
+    this.userLogoLocator = this.page.getByRole('img', { name: 'Иконка канала channel67448450' });
+    this.headerUserMenuLocator = this.page.getByText(
+      'channel67448450+7 *** ***-08-02Завершите регистрациюПрофильМой каналСтудия',
+    );
+    this.spamModalWindow = this.page.locator(
+      '.wdp-popup-module__popup wdp-onboardings-inventory-module__popup wdp-onboardings-inventory-module__contentWithPicture',
+    );
   }
+
+  //actions
 
   async open() {
     await this.page.goto('https://rutube.ru/');
   }
-
-  async closeModalWindow() {
-    await this.page.getByRole('button', { name: 'Закрыть' }).click();
-  }
-
-  async headerHasCorrectAriaSnapshot() {
-    await expect(this.headerLocator).toMatchAriaSnapshot({ name: 'headerAriaSnapshot.yml' });
-  }
-
-  async categoriesTabsHasCorrectAriaSnapshot() {
-    await expect(this.categoriesTabsLocator).toMatchAriaSnapshot({
-      name: 'categoriesTabsAriaSnapshot.yml',
-    });
-  }
-
-  async menuHasCorrectAriaSnapshot() {
-    await expect(this.menuLocator).toMatchAriaSnapshot({ name: 'menuAriaSnapshot.yml' });
-  }
-
+  // async closeModalWindow() {
+  //   await this.page.getByRole('button', { name: 'Закрыть' }).click();
+  // }
   async openAddPopupList() {
     await this.headerAddButtonLocator.click();
   }
-
   async openNotificationsPopup() {
     await this.headerNotificationsButtonLocator.click();
   }
-
   async openAuthorizationModal() {
     await this.headerLoginButtonLocator.click();
   }
-
   async switchToRegistrationModal() {
     await this.switchToEmailAuthorizationButtonLocator.click();
     await this.switchToNumberRegistrationButtonLocator.click();
   }
-
-  async addPopupListHasCorrectAriaSnapshot() {
-    await expect(this.headerAddButtonPopupListLocator).toMatchAriaSnapshot({
-      name: 'addButtonPopupList.yml',
-    });
-  }
-
-  async notificationsPopupHasCorrectAriaSnapshot() {
-    await expect(this.headerNotificationsPopupLocator).toMatchAriaSnapshot({
-      name: 'notificationsPopup.yml',
-    });
-  }
-
-  async authorizationModalHasCorrectAriaSnapshot() {
-    await expect(this.authorizationModalLocator).toMatchAriaSnapshot({
-      name: 'authorizationModal.yml',
-    });
-  }
-
-  async registrationModalHasCorrectAriaSnapshot() {
-    await expect(this.authorizationModalLocator).toMatchAriaSnapshot({
-      name: 'registrationModal.yml',
-    });
-  }
-
   async openFullMenu() {
     await this.menuButtonLocator.click();
   }
-
-  async fullMenuHasCorrectAriaSnapshot() {
-    await expect(this.openMenuAriaLocator).toMatchAriaSnapshot({
-      name: 'fullMenuSnapshot.yml',
-    });
-  }
-
   async changeThemeToWhite() {
     await this.changeThemeButtonLocator.click();
   }
+  async openHeaderUserMenu() {
+    await this.userLogoLocator.click();
+  }
+  async closeSpamModal() {
+    if (await this.spamModalWindow.isVisible()) {
+      await this.page.getByRole('button', { name: 'Закрыть' }).click();
+    } else await this.page.getByRole('button', { name: 'Закрыть' }).click();
+  }
 
+  //assertions
+
+  async addPopupListHasCorrectAriaSnapshot() {
+    await this.checkAriaSnapshot(this.headerAddButtonPopupListLocator, 'addButtonPopupList.yml');
+  }
+  async notificationsPopupHasCorrectAriaSnapshot() {
+    await this.checkAriaSnapshot(this.headerNotificationsPopupLocator, 'notificationsPopup.yml');
+  }
+  async authorizationModalHasCorrectAriaSnapshot() {
+    await this.checkAriaSnapshot(this.authorizationModalLocator, 'authorizationModal.yml');
+  }
+  async registrationModalHasCorrectAriaSnapshot() {
+    await this.checkAriaSnapshot(this.authorizationModalLocator, 'registrationModal.yml');
+  }
+  async fullMenuHasCorrectAriaSnapshot() {
+    await this.checkAriaSnapshot(this.openMenuAriaLocator, 'fullMenuSnapshot.yml');
+  }
+  async headerUserMenuHasCorrectAriaSnapshot() {
+    await this.checkAriaSnapshot(this.headerUserMenuLocator, 'headerUserMenuSnapshot.yml');
+  }
+  async headerHasCorrectAriaSnapshot() {
+    await this.checkAriaSnapshot(this.headerLocator, 'headerAriaSnapshot.yml');
+  }
+  async categoriesTabsHasCorrectAriaSnapshot() {
+    await this.checkAriaSnapshot(this.categoriesTabsLocator, 'categoriesTabsAriaSnapshot.yml');
+  }
+  async menuHasCorrectAriaSnapshot() {
+    await this.checkAriaSnapshot(this.menuLocator, 'menuAriaSnapshot.yml');
+  }
   async checkThemeAttributeValue(attributeValue: 'dark2021' | 'white2022') {
     await expect(this.page.locator('html')).toHaveAttribute('data-pen-theme', attributeValue);
   }

@@ -7,7 +7,7 @@ chromium.use(stealth());
 
 const authFile = path.join(__dirname, '../playwright/.auth/user.json');
 
-test('test', async () => {
+test('Auth setup', async () => {
   test.setTimeout(40000);
   const browser = await chromium.launch();
   const context = await browser.newContext();
