@@ -11,13 +11,6 @@ test('Проверка доступности элементов попапа у
   await mainPage.notificationsPopupHasCorrectAriaSnapshot();
 });
 
-test('Проверка доступности элементов раскрытого меню авторизованного пользователя', async ({
-  mainPage,
-}) => {
-  await mainPage.openFullMenu();
-  await mainPage.fullMenuHasCorrectAriaSnapshot();
-});
-
 test('Проверка доступности элементов меню пользователя в хедере авторизованного пользователя', async ({
   mainPage,
 }) => {

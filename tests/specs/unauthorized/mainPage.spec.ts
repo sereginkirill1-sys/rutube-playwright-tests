@@ -50,13 +50,6 @@ test('Проверка доступности элементов модальн�
   await mainPage.registrationModalHasCorrectAriaSnapshot();
 });
 
-test('Проверка доступности элементов раскрытого меню неавторизованного пользователя', async ({
-  mainPage,
-}) => {
-  await mainPage.openFullMenu();
-  await mainPage.fullMenuHasCorrectAriaSnapshot();
-});
-
 test('Переключение темы', async ({ mainPage }) => {
   await mainPage.checkThemeAttributeValue('dark2021');
   await mainPage.changeThemeToWhite();

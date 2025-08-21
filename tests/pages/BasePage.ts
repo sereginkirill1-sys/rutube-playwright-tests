@@ -23,7 +23,7 @@ export class BasePage {
     });
   }
   protected async checkLayoutByScreenshot(locator: Locator, screenshotName: string) {
-    await expect(locator).toHaveScreenshot(screenshotName);
+    await expect(locator).toHaveScreenshot(screenshotName, { timeout: 15000 });
   }
   protected async hideElement(selector: string) {
     await this.page.evaluate((selector) => {

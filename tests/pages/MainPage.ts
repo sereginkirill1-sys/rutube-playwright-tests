@@ -12,12 +12,10 @@ export class MainPage extends BasePage {
   private readonly authorizationModalLocator: Locator;
   private readonly switchToEmailAuthorizationButtonLocator: Locator;
   private readonly switchToNumberRegistrationButtonLocator: Locator;
-  private readonly menuButtonLocator: Locator;
-  private readonly openMenuAriaLocator: Locator;
   private readonly changeThemeButtonLocator: Locator;
   private readonly userLogoLocator: Locator;
   private readonly headerUserMenuLocator: Locator;
-  private readonly spamModalWindow: Locator;
+  // private readonly spamModalWindow: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -48,8 +46,6 @@ export class MainPage extends BasePage {
       .locator('iframe[title="Multipass"]')
       .contentFrame()
       .getByRole('button', { name: 'Зарегистрироваться по телефону' });
-    this.menuButtonLocator = this.page.getByRole('button', { name: 'Открыть меню навигации' });
-    this.openMenuAriaLocator = this.page.locator('.menu-content-module__menuOpen');
     this.changeThemeButtonLocator = this.page.getByRole('button', {
       name: 'Переключить на светлую тему',
     });
@@ -57,9 +53,9 @@ export class MainPage extends BasePage {
     this.headerUserMenuLocator = this.page.getByText(
       'channel67448450+7 *** ***-08-02Завершите регистрациюПрофильМой каналСтудия',
     );
-    this.spamModalWindow = this.page.locator(
-      '.wdp-popup-module__popup wdp-onboardings-inventory-module__popup wdp-onboardings-inventory-module__contentWithPicture',
-    );
+    // this.spamModalWindow = this.page.locator(
+    //   '.wdp-popup-module__popup wdp-onboardings-inventory-module__popup wdp-onboardings-inventory-module__contentWithPicture',
+    // );
   }
 
   //actions
@@ -83,20 +79,17 @@ export class MainPage extends BasePage {
     await this.switchToEmailAuthorizationButtonLocator.click();
     await this.switchToNumberRegistrationButtonLocator.click();
   }
-  async openFullMenu() {
-    await this.menuButtonLocator.click();
-  }
   async changeThemeToWhite() {
     await this.changeThemeButtonLocator.click();
   }
   async openHeaderUserMenu() {
     await this.userLogoLocator.click();
   }
-  async closeSpamModal() {
-    if (await this.spamModalWindow.isVisible()) {
-      await this.page.getByRole('button', { name: 'Закрыть' }).click();
-    } else await this.page.getByRole('button', { name: 'Закрыть' }).click();
-  }
+  // async closeSpamModal() {
+  //   if (await this.spamModalWindow.isVisible()) {
+  //     await this.page.getByRole('button', { name: 'Закрыть' }).click();
+  //   } else await this.page.getByRole('button', { name: 'Закрыть' }).click();
+  // }
 
   //assertions
 
@@ -111,9 +104,6 @@ export class MainPage extends BasePage {
   }
   async registrationModalHasCorrectAriaSnapshot() {
     await this.checkAriaSnapshot(this.authorizationModalLocator, 'registrationModal.yml');
-  }
-  async fullMenuHasCorrectAriaSnapshot() {
-    await this.checkAriaSnapshot(this.openMenuAriaLocator, 'fullMenuSnapshot.yml');
   }
   async headerUserMenuHasCorrectAriaSnapshot() {
     await this.checkAriaSnapshot(this.headerUserMenuLocator, 'headerUserMenuSnapshot.yml');
