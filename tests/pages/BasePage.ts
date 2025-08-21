@@ -3,14 +3,21 @@ import { expect, Page, Locator } from '@playwright/test';
 export class BasePage {
   readonly page: Page;
   private readonly spamModalWindow: Locator;
+  private readonly cookiesPopup: Locator;
   constructor(page: Page) {
     this.page = page;
     this.spamModalWindow = this.page.locator(
       '.wdp-popup-module__popup wdp-onboardings-inventory-module__popup wdp-onboardings-inventory-module__contentWithPicture',
     );
+    this.cookiesPopup = this.page
+      .getByRole('complementary', { name: 'Уведомление об использовании cookies' })
+      .locator('div')
+      .first();
   }
   async closeCookiesAlert() {
-    await this.page.getByRole('button', { name: 'Ок', exact: true }).click();
+    if (await this.spamModalWindow.isVisible()) {
+      await this.page.getByRole('button', { name: 'Ок', exact: true }).click();
+    } else await this.page.getByRole('button', { name: 'Ок', exact: true }).click();
   }
   async closeSpamModal() {
     if (await this.spamModalWindow.isVisible()) {
